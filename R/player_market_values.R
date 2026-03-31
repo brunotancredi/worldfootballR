@@ -31,7 +31,7 @@ tm_each_team_player_market_val <- function(each_team_url, time_pause = 15) {
   team_page <- xml2::read_html(each_team_url)
   
   comp_name <- team_page |> rvest::html_elements(".data-header__club a") |> rvest::html_text() |> trimws()
-  country <- team_page |> rvest::html_elements(".data-header__content a img") |> rvest::html_attr("title")
+  #country <- team_page |> rvest::html_elements(".data-header__content a img") |> rvest::html_attr("title")
   season_start_year <- gsub(".*saison_id/", "", each_team_url) |> gsub("/plus/1", "", x=_) |> as.numeric()
   
   team_data <- team_page %>% rvest::html_nodes("#yw1") %>% rvest::html_nodes(".items") %>% rvest::html_node("tbody")
@@ -146,8 +146,9 @@ tm_each_team_player_market_val <- function(each_team_url, time_pause = 15) {
   
   team_df <- team_df |> 
     dplyr::mutate(comp_name = comp_name,
-                  season_start_year = season_start_year,
-                  country = country) |> 
+                  season_start_year = season_start_year
+                 # country = "country"
+                ) |> 
     dplyr::mutate(player_market_value_euro = mapply(.convert_value_to_numeric, player_market_value)) %>%
     dplyr::mutate(date_joined = .tm_fix_dates(.data[["date_joined"]]),
                   contract_expiry = .tm_fix_dates(.data[["contract_expiry"]])) %>%
@@ -156,7 +157,7 @@ tm_each_team_player_market_val <- function(each_team_url, time_pause = 15) {
                   player_birthday = gsub("\\s*\\([^)]*\\)", "", .data[["player_birthday"]]),
                   player_dob = suppressWarnings(lubridate::dmy(.data[["player_birthday"]]))) %>%
     dplyr::mutate(player_age = as.numeric(gsub("\\D", "", .data[["player_age"]]))) %>%
-    dplyr::select(.data[["comp_name"]], .data[["country"]], .data[["season_start_year"]], .data[["squad"]], .data[["player_num"]], .data[["player_name"]], .data[["player_position"]], .data[["player_dob"]], .data[["player_age"]], .data[["player_nationality"]], .data[["current_club"]],
+    dplyr::select(.data[["comp_name"]], .data[["season_start_year"]], .data[["squad"]], .data[["player_num"]], .data[["player_name"]], .data[["player_position"]], .data[["player_dob"]], .data[["player_age"]], .data[["player_nationality"]], .data[["current_club"]],
                   .data[["player_height_mtrs"]], .data[["player_foot"]], .data[["date_joined"]], .data[["joined_from"]], .data[["contract_expiry"]], .data[["player_market_value_euro"]], .data[["player_url"]])
   
   
