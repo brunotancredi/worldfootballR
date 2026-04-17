@@ -145,7 +145,7 @@ tm_each_team_player_market_val <- function(each_team_url, time_pause = 15) {
                                     player_height_mtrs, player_foot, date_joined, joined_from, contract_expiry, player_market_value) %>% data.frame())
   
   team_df <- team_df |> 
-    dplyr::mutate(comp_name = comp_name,
+    dplyr::mutate(# comp_name = comp_name,
                   season_start_year = season_start_year
                  # country = "country"
                 ) |> 
@@ -157,7 +157,7 @@ tm_each_team_player_market_val <- function(each_team_url, time_pause = 15) {
                   player_birthday = gsub("\\s*\\([^)]*\\)", "", .data[["player_birthday"]]),
                   player_dob = suppressWarnings(lubridate::dmy(.data[["player_birthday"]]))) %>%
     dplyr::mutate(player_age = as.numeric(gsub("\\D", "", .data[["player_age"]]))) %>%
-    dplyr::select(.data[["comp_name"]], .data[["season_start_year"]], .data[["squad"]], .data[["player_num"]], .data[["player_name"]], .data[["player_position"]], .data[["player_dob"]], .data[["player_age"]], .data[["player_nationality"]], .data[["current_club"]],
+    dplyr::select(.data[["season_start_year"]], .data[["squad"]], .data[["player_num"]], .data[["player_name"]], .data[["player_position"]], .data[["player_dob"]], .data[["player_age"]], .data[["player_nationality"]], .data[["current_club"]],
                   .data[["player_height_mtrs"]], .data[["player_foot"]], .data[["date_joined"]], .data[["joined_from"]], .data[["contract_expiry"]], .data[["player_market_value_euro"]], .data[["player_url"]])
   
   
